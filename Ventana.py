@@ -30,6 +30,7 @@ class Ventana(tk.Tk):
         self.crearEtiquetas(colorFondo, colorLetra)
         self.crearEntradas()
         self.crearBotones()
+        #self.insertarImagen()
         self.tabla = self.crearTabla()
 
         self.ajenda.iniciarArchivo()  # Creacion del archivo
@@ -55,36 +56,43 @@ class Ventana(tk.Tk):
         lbCorreo.place(x=50, y=140)
 
         lbTelefono = Label(self, text='Telefono', bg=colorFondo, fg=colorLetra)
-        lbTelefono.place(x=50, y=190)
+        lbTelefono.place(x=50, y=170)
 
     def crearEntradas(self):
 
-        self.etNombre = Entry(self, textvariable=self.nombre)  # Creacion de una entrada "Entry"
-        self.etNombre.place(x=150, y=50)  # Ubicacion de la entrada
+        self.etNombre = Entry(self, textvariable=self.nombre, width=25)  # Creacion de una entrada "Entry"
+        self.etNombre.place(x=130, y=50)  # Ubicacion de la entrada
         self.etNombre.focus_set()  # Autofocus
 
-        etApellido = Entry(self, textvariable=self.apellido)
-        etApellido.place(x=150, y=80)
+        etApellido = Entry(self, textvariable=self.apellido, width=25)
+        etApellido.place(x=130, y=80)
 
-        etCorreo = Entry(self, textvariable=self.correo)
-        etCorreo.place(x=150, y=140)
+        etCorreo = Entry(self, textvariable=self.correo, width=25)
+        etCorreo.place(x=130, y=140)
 
-        etTelefono = Entry(self, textvariable=self.telefono)
-        etTelefono.place(x=150, y=190)
+        etTelefono = Entry(self, textvariable=self.telefono, width=25)
+        etTelefono.place(x=130, y=170)
+
+        etBuscar = Entry(self, width=25)
+        etBuscar.place(x=440, y=50)
 
     def crearBotones(self):
 
         btnGuardar = Button(self, text='Guardar', command=lambda: self.crearContacto(1))  # Creacion de un boton
-        btnGuardar.place(x=330, y=190)  # Ubicacion del boton
+        btnGuardar.place(x=330, y=170)  # Ubicacion del boton
 
         btnModificar = Button(self, text='Modificar', command=lambda: self.crearContacto(2))
-        btnModificar.place(x=410, y=190)
+        btnModificar.place(x=410, y=170)
 
         btnEliminar = Button(self, text='Eliminar', command=self.eliminarContacto)
-        btnEliminar.place(x=500, y=190)
+        btnEliminar.place(x=500, y=170)
 
         btnLimpiar = Button(self, text="Limpiar", command=self.limpiarVentana)
-        btnLimpiar.place(x=580, y=190)
+        btnLimpiar.place(x=580, y=170)
+
+    def insertarImagen(self):
+        imagen = PhotoImage(file="lupa.gif")
+        Label(self, image=imagen).pack() #place(x=450, y=50)
 
     def crearTabla(self):
 
