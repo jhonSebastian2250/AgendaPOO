@@ -55,6 +55,18 @@ class Ajenda:
                 self.escribirContacto()  # Escribe los contactos en un archivo
                 break
 
+    def buscar(self, caracteres):
+        contactosEncontrados = []
+        for contacto in self.listaContactos:
+            conExistente = contacto.split('$')
+            if caracteres in conExistente[0]:
+                contactosEncontrados.append(conExistente)
+        return contactosEncontrados
+        """for contacto in contactosEncontrados:
+            print(contacto)
+        print("_______________________________________________")"""
+
+
     def iniciarArchivo(self):
         """
         Inicializar archivo

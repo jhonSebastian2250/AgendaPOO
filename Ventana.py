@@ -25,12 +25,12 @@ class Ventana(tk.Tk):
         self.apellido = StringVar()
         self.telefono = StringVar()
         self.correo = StringVar()
+        self.buscarContacto = StringVar()
 
         # Creacion de caracteristicas de la ventana
         self.crearEtiquetas(colorFondo, colorLetra)
         self.crearEntradas()
         self.crearBotones()
-        #self.insertarImagen()
         self.tabla = self.crearTabla()
 
         self.ajenda.iniciarArchivo()  # Creacion del archivo
@@ -58,6 +58,9 @@ class Ventana(tk.Tk):
         lbTelefono = Label(self, text='Telefono', bg=colorFondo, fg=colorLetra)
         lbTelefono.place(x=50, y=170)
 
+        lbBuscar = Label(self, text='Buscar', bg=colorFondo, fg=colorLetra)
+        lbBuscar.place(x=430,y=50)
+
     def crearEntradas(self):
 
         self.etNombre = Entry(self, textvariable=self.nombre, width=25)  # Creacion de una entrada "Entry"
@@ -73,8 +76,9 @@ class Ventana(tk.Tk):
         etTelefono = Entry(self, textvariable=self.telefono, width=25)
         etTelefono.place(x=130, y=170)
 
-        etBuscar = Entry(self, width=25)
-        etBuscar.place(x=440, y=50)
+        self.buscarContacto.trace("w", self.buscar)
+        etBuscar = Entry(self, width=25, textvariable=self.buscarContacto)
+        etBuscar.place(x=480, y=50)
 
     def crearBotones(self):
 
@@ -89,10 +93,6 @@ class Ventana(tk.Tk):
 
         btnLimpiar = Button(self, text="Limpiar", command=self.limpiarVentana)
         btnLimpiar.place(x=580, y=170)
-
-    def insertarImagen(self):
-        imagen = PhotoImage(file="lupa.gif")
-        Label(self, image=imagen).pack() #place(x=450, y=50)
 
     def crearTabla(self):
 
@@ -219,3 +219,13 @@ class Ventana(tk.Tk):
         self.telefono.set("")
         self.correo.set("")
         self.etNombre.focus_set()
+
+    def buscar(self, *args):
+        contactosEncontrados = self.ajenda.buscar(self.buscarContacto.get())
+        if self.buscarContacto.get():
+            self.tabla.delete(*self.tabla.get_children())  # Elimina todos los datos de la tabla, menos los encabezados
+            for i in range(len(contactosEncontrados)):
+                data = contactosEncontrados[i]
+                self.tabla.insert('', END, values=data)  # Inserta los contactos en la tabla
+        else:
+            self.mostrarContactos(self.ajenda.listaContactos)
