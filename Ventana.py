@@ -43,7 +43,7 @@ class Ventana(tk.Tk):
 
     def crearEtiquetas(self, colorFondo, colorLetra):
 
-        lbTitulo = Label(self, text='Mi Aplicacion', bg=colorFondo, fg=colorLetra)  # Creacion del Label
+        lbTitulo = Label(self, text='Mi Ajenda', bg=colorFondo, fg=colorLetra)  # Creacion del Label
         lbTitulo.place(x=270, y=10)  # Ubicacion del Label
 
         lbNombre = Label(self, text='Nombre', bg=colorFondo, fg=colorLetra)

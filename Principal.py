@@ -1,5 +1,4 @@
 from Ventana import Ventana
-from tkinter import *
 
 __author__ = 'Jhon Sebastian Zuñiga'
 
