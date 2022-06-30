@@ -129,20 +129,21 @@ class Ventana(tk.Tk):
 
         if boton == 1:  # Si el boton oprimido es el de guardar
             # Si todos las entradas tienen algun valor
-            if self.nombre.get() and self.apellido.get() and self.correo.get() and self.telefono.get():
+            if self.nombre.get().strip() and self.apellido.get().strip() and self.correo.get().strip() and self.telefono.get().strip():
                 if self.banModificar:  # Si la bandera del boton modificar esta activa
                     try:
-                        self.modificarContacto()  # Modifica el cotacto
+                        self.modificarContacto()  # Modifica el contacto
                         messagebox.showinfo("Modificar", "Contacto Modificado")
                     except:
-                        messagebox.showerror("Modificar", "Erro al Modificar")
+                        messagebox.showerror("Modificar", "Error al Modificar")
 
                     self.limpiarVentana()
                     self.contactoSeleccionado = []  # Limpia los datos de la variable contactoSeleccionado
                     self.banModificar = False  # Apaga la bandera de el boton modificar
                 else:  # Si la bandera del boton modificar esta apagada
-
-                    contacto = Contacto(self.nombre.get(), self.apellido.get(), self.telefono.get(), self.correo.get())
+                    nombre, apellido, telefono, correo = self.formatearEntradas(self.nombre.get(), self.apellido.get(),
+                                                                                self.telefono.get(), self.correo.get())
+                    contacto = Contacto(nombre, apellido, telefono, correo)
                     try:
                         self.ajenda.guardar(contacto)  # guarda el contacto
                         messagebox.showinfo("Guardar", "Se guardo correctamente")
@@ -192,24 +193,37 @@ class Ventana(tk.Tk):
             contacto.append(str(dato))  # Convierte cada uno de los datos del contacto en string
 
         # Si todas las entradas tienen un valor
-        if self.nombre.get() and self.apellido.get() and self.correo.get() and self.telefono.get():
+        if self.nombre.get().split() and self.apellido.get().split() and self.correo.get().split() and self.telefono.get().split():
             contactoModificado = []  # Garda los datos modificados del contacto seleccionado
-            contactoModificado.append(self.nombre.get())
-            contactoModificado.append(self.apellido.get())
-            contactoModificado.append(self.correo.get())
-            contactoModificado.append(self.telefono.get())
+
+            nombre, apellido, telefono, correo = self.formatearEntradas(self.nombre.get(), self.apellido.get(),
+                                                                        self.telefono.get(), self.correo.get())
+            contactoModificado.append(nombre)
+            contactoModificado.append(apellido)
+            contactoModificado.append(telefono)
+            contactoModificado.append(correo)
 
             self.ajenda.guardar(contacto, contactoModificado)  # Modifica el contacto
             self.mostrarContactos(self.ajenda.listaContactos)  # Actualiza los datos de la tabla
         else:
             messagebox.showinfo("vacio", "algunas entradas estan vacias")
 
+    def buscar(self, *args):
+        contactosEncontrados = self.ajenda.buscar(self.buscarContacto.get())
+        if self.buscarContacto.get():  # Si se esta buscando un contacto
+            self.tabla.delete(*self.tabla.get_children())  # Elimina todos los datos de la tabla, menos los encabezados
+            for i in range(len(contactosEncontrados)):
+                contacto = contactosEncontrados[i]
+                self.tabla.insert('', END, values=contacto)  # Inserta los contactos en la tabla
+        else:
+            self.mostrarContactos(self.ajenda.listaContactos)
+
     def mostrarContactos(self, contactos):
 
         self.tabla.delete(*self.tabla.get_children())  # Elimina todos los datos de la tabla, menos los encabezados
 
         for i in range(len(contactos)):
-            data = (contactos[i].split("$"))
+            data = (contactos[i].split('^'))
             self.tabla.insert('', END, values=data)  # Inserta los contactos en la tabla
 
     def limpiarVentana(self):
@@ -220,12 +234,13 @@ class Ventana(tk.Tk):
         self.correo.set("")
         self.etNombre.focus_set()
 
-    def buscar(self, *args):
-        contactosEncontrados = self.ajenda.buscar(self.buscarContacto.get())
-        if self.buscarContacto.get():
-            self.tabla.delete(*self.tabla.get_children())  # Elimina todos los datos de la tabla, menos los encabezados
-            for i in range(len(contactosEncontrados)):
-                data = contactosEncontrados[i]
-                self.tabla.insert('', END, values=data)  # Inserta los contactos en la tabla
-        else:
-            self.mostrarContactos(self.ajenda.listaContactos)
+    def formatearEntradas(self, nombre, apellido, telefono, correo):
+        nombre = nombre.strip()  # Elimina espacios en blanco al inicio y al final
+        apellido = apellido.strip()
+        telefono = telefono.strip()
+        correo = correo.strip()
+
+        nombre = nombre.capitalize()  # Convierte la primer letra en mayuscula
+        apellido = apellido.capitalize()
+
+        return nombre, apellido, telefono, correo
