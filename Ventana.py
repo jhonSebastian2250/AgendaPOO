@@ -102,6 +102,8 @@ class Ventana(tk.Tk):
         columnas = ('Nombre', 'Apellido', 'Correo', 'Telefono')  # Definicion de las columnas para la tabla
 
         tabla = ttk.Treeview(frame, columns=columnas, show='headings', height=11)
+
+        # Encabezado de la tabla
         tabla.grid(row=0, column=0, sticky='nsew')
         tabla.heading('Nombre', text='Nombre')
         tabla.column('Nombre', width=150)
