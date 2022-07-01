@@ -1,4 +1,4 @@
-class Ajenda:
+class Agenda:
     listaContactos = []
 
     def guardar(self, contacto, contactoModificado=None):

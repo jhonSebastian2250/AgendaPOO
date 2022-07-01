@@ -2,7 +2,7 @@ from tkinter import *
 import tkinter as tk
 from tkinter import ttk, messagebox
 
-from Ajenda import Ajenda
+from Agenda import Agenda
 from Contacto import Contacto
 
 
@@ -11,7 +11,7 @@ class Ventana(tk.Tk):
     def __init__(self):
 
         super().__init__()
-        self.ajenda = Ajenda()  # Creacion de un objeto de tipo ajenda
+        self.agenda = Agenda()  # Creacion de un objeto de tipo ajenda
 
         self.title('Agenda')  # Titulo de la ventana
         self.geometry('650x500')  # Tamaño de la ventana (ancho - alto)
@@ -33,17 +33,17 @@ class Ventana(tk.Tk):
         self.crearBotones()
         self.tabla = self.crearTabla()
 
-        self.ajenda.iniciarArchivo()  # Creacion del archivo
-        self.ajenda.cargar()  # Carga los contactos registrados
+        self.agenda.iniciarArchivo()  # Creacion del archivo
+        self.agenda.cargar()  # Carga los contactos registrados
 
-        self.mostrarContactos(self.ajenda.listaContactos)  # Muestra en la tabla los contactos registrados
+        self.mostrarContactos(self.agenda.listaContactos)  # Muestra en la tabla los contactos registrados
 
         self.contactoSeleccionado = []  # Almacena los datos del contacto seleccionado
         self.banModificar = False  # Bandera para saber si el boton modificar esta activo o no
 
     def crearEtiquetas(self, colorFondo, colorLetra):
 
-        lbTitulo = Label(self, text='Mi Ajenda', bg=colorFondo, fg=colorLetra)  # Creacion del Label
+        lbTitulo = Label(self, text='Mi Agenda', bg=colorFondo, fg=colorLetra)  # Creacion del Label
         lbTitulo.place(x=270, y=10)  # Ubicacion del Label
 
         lbNombre = Label(self, text='Nombre', bg=colorFondo, fg=colorLetra)
@@ -145,12 +145,12 @@ class Ventana(tk.Tk):
                                                                                 self.telefono.get(), self.correo.get())
                     contacto = Contacto(nombre, apellido, telefono, correo)
                     try:
-                        self.ajenda.guardar(contacto)  # guarda el contacto
+                        self.agenda.guardar(contacto)  # guarda el contacto
                         messagebox.showinfo("Guardar", "Se guardo correctamente")
                     except:
                         messagebox.showerror("Guardar", "Error al guardar")
 
-                    self.mostrarContactos(self.ajenda.listaContactos)  # Actualiza los datos de la tabla
+                    self.mostrarContactos(self.agenda.listaContactos)  # Actualiza los datos de la tabla
                     self.limpiarVentana()
                     self.contactoSeleccionado = []  # Limpia los datos de la variable contactoSeleccionado
             else:
@@ -175,7 +175,7 @@ class Ventana(tk.Tk):
 
         if len(self.contactoSeleccionado) > 0:  # Si se selecciona un contacto
             try:
-                self.ajenda.eliminar(contacto)  # Elimina el contacto
+                self.agenda.eliminar(contacto)  # Elimina el contacto
                 messagebox.showinfo("Eliminar", "Contacto " + str(self.contactoSeleccionado[0]) + " eliminado")
             except:
                 messagebox.showerror("Eliminar", "Contacto no eliminado")
@@ -184,7 +184,7 @@ class Ventana(tk.Tk):
 
         self.contactoSeleccionado = []  # Limpia los datos de la variable contactoSeleccionado
 
-        self.mostrarContactos(self.ajenda.listaContactos)  # Actualiza los datos de la tabla
+        self.mostrarContactos(self.agenda.listaContactos)  # Actualiza los datos de la tabla
 
     def modificarContacto(self):
 
@@ -203,20 +203,20 @@ class Ventana(tk.Tk):
             contactoModificado.append(telefono)
             contactoModificado.append(correo)
 
-            self.ajenda.guardar(contacto, contactoModificado)  # Modifica el contacto
-            self.mostrarContactos(self.ajenda.listaContactos)  # Actualiza los datos de la tabla
+            self.agenda.guardar(contacto, contactoModificado)  # Modifica el contacto
+            self.mostrarContactos(self.agenda.listaContactos)  # Actualiza los datos de la tabla
         else:
             messagebox.showinfo("vacio", "algunas entradas estan vacias")
 
     def buscar(self, *args):
-        contactosEncontrados = self.ajenda.buscar(self.buscarContacto.get())
+        contactosEncontrados = self.agenda.buscar(self.buscarContacto.get())
         if self.buscarContacto.get():  # Si se esta buscando un contacto
             self.tabla.delete(*self.tabla.get_children())  # Elimina todos los datos de la tabla, menos los encabezados
             for i in range(len(contactosEncontrados)):
                 contacto = contactosEncontrados[i]
                 self.tabla.insert('', END, values=contacto)  # Inserta los contactos en la tabla
         else:
-            self.mostrarContactos(self.ajenda.listaContactos)
+            self.mostrarContactos(self.agenda.listaContactos)
 
     def mostrarContactos(self, contactos):
 
